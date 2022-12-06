@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "ray-experiments"
+version = "0.1.0"
+description = ""
+authors = ["jaymody <jaykmody@gmail.com>"]
+readme = "README.md"
+packages = [{include = "ray_experiments"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+ray = {extras = ["default"], version = "^2.1.0"}
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.10.0"
+pylint = "^2.15.8"
+isort = "^5.10.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+
+[tool.pylint.messages_control]
+disable = ["C", "R"]
