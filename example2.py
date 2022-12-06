@@ -1,4 +1,3 @@
-import functools
 import time
 
 import ray
@@ -10,6 +9,16 @@ def f(x, y):
     # simulate work
     time.sleep(1)
     return x + y
+
+
+def linear_reduce(f, l):
+    if len(l) == 0:
+        raise ValueError("len(l) must be > 0")
+
+    def recurse(l):
+        return l[0] if len(l) == 1 else f(l[-1], recurse(l[:-1]))
+
+    return recurse(l)
 
 
 def divide_and_conquer_reduce(f, l):
@@ -29,7 +38,7 @@ def main():
 
     with Timer("Ray Linear"):
         f_ray_remote = ray.remote(f)
-        result_ids = functools.reduce(f_ray_remote.remote, data)
+        result_ids = linear_reduce(f_ray_remote.remote, data)
         results = ray.get(result_ids)
         print(results)
 
@@ -40,7 +49,7 @@ def main():
         print(results)
 
     with Timer("Vanilla Linear"):
-        results = functools.reduce(f, data)
+        results = linear_reduce(f, data)
         print(results)
 
     with Timer("Vanilla Divide and Conquer"):
